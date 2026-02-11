@@ -1,0 +1,45 @@
+﻿databases:
+  - name: recruitflow-db
+    plan: starter
+    databaseName: recruitflow
+    user: recruitflow
+
+services:
+  - type: web
+    name: recruitflow-api
+    env: node
+    plan: starter
+    autoDeploy: true
+    rootDir: .
+    healthCheckPath: /health
+    buildCommand: npm ci && npm run build -w @recruitflow/api
+    startCommand: npm run start -w @recruitflow/api
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: recruitflow-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: WEBHOOK_SECRET
+        generateValue: true
+      - key: CRON_DISPATCH_SECRET
+        generateValue: true
+      - key: WEBHOOK_TARGET_URL
+        sync: false
+
+  - type: cron
+    name: recruitflow-outbox-dispatch
+    env: node
+    plan: starter
+    schedule: "*/1 * * * *"
+    rootDir: .
+    buildCommand: npm ci
+    startCommand: npm run cron:dispatch-outbox -w @recruitflow/api
+    envVars:
+      - key: API_BASE_URL
+        value: https://recruitflow-api.onrender.com
+      - key: CRON_DISPATCH_SECRET
+        sync: false

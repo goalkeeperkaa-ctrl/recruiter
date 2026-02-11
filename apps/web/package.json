@@ -1,0 +1,11 @@
+﻿{
+  "name": "@recruitflow/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo \"web app scaffold pending\"",
+    "build": "echo \"web build pending\"",
+    "lint": "echo \"No lint configured yet\"",
+    "test": "node --test"
+  }
+}
