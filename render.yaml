@@ -12,7 +12,7 @@ services:
     autoDeploy: true
     rootDir: .
     healthCheckPath: /health
-    buildCommand: npm ci && npm run build -w @recruitflow/api
+    buildCommand: npm ci --include=dev && npm run build -w @recruitflow/api
     startCommand: npm run start -w @recruitflow/api
     envVars:
       - key: NODE_ENV
